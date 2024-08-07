@@ -1,0 +1,1465 @@
+﻿####################################
+# Mp3tag parsing for goodreads.com, created by Vaso Li, part based on  FidoFuz
+#
+
+#
+# This file should be saved in your mp3tag sources folder: %AppData%\Roaming\Mp3tag\data\sources
+#
+###################################
+ 
+[Name]=Goodreads
+[BasedOn]=www.goodreads.com
+[IndexUrl]=https://www.goodreads.com/search?utf8=%E2%9C%93&search_type=books&q=
+[AlbumUrl]=https://www.goodreads.com/book/show.xml?format=xml&user_id=29848886&key=ckvsiSDsuqh7omh74ZZ6Q&id=
+[WordSeperator]=+
+[IndexFormat]=%Title%|%_url%|%Author%
+[SearchBy]=$regexp(%album%,'[- ]+cd ?\d+$',,1)
+[Encoding]=url-utf-8
+ 
+[ParserScriptIndex]=...
+# ###################################################################
+#					I  N  D  E  X
+# ###################################################################
+DebugWriteInput "B:\Downloads\TestLib\search.html"
+Debug "ON" "B:\Downloads\TestLib\search_debug.txt"
+ 
+findline "<meta content='Search results" 1 1
+unspace
+
+if "<meta"
+	findline "<tr itemscope itemtype=\"http://schema.org/Book\">" 1 1
+	
+	unspace
+	do
+		#  Title
+		findline "<a title=\""
+		replace "." "*"
+		findinline "<a title=\""
+		sayuntil "\""
+		say "|"
+ 
+		# Url
+		findinline "/book/show/"	
+		sayuntil "?"
+		say "|"
+ 
+		# Author
+		findline "class=\"authorName\""
+		joinuntil "</a>"
+		findinline "\"name\">"
+		sayuntil "<"
+ 
+		saynewline
+		findline "<tr itemscope itemtype=\"http://schema.org/Book\">" 1 1
+		unspace
+	while "<tr" 20
+else
+	gotoline 1
+	# redirected straight to the page instead of a search page, just pass it to the Album Parser
+	# usually when an ISDB or ASIN is provided as the search
+	say "|"
+	sayoutput "currenturl"
+	say "|"
+	saynewline
+endif
+ 
+[ParserScriptAlbum]=...
+# ###################################################################
+#					A  L  B  U  M
+# ###################################################################
+DebugWriteInput "B:\Downloads\TestLib\detail.html"
+Debug "ON" "B:\Downloads\TestLib\detail_debug.txt"
+ 
+# Album
+findline "<title>"
+findinline "<title>"
+outputto "album"
+sayuntil "</title>"
+
+findline "<description>"
+findinline "CDATA"
+MoveChar 1
+outputto "Comment"
+sayuntil "\]\]>"
+outputto "DESCRIPTION"
+sayoutput "Comment"
+
+# Original year
+findline "original_publication_year"
+findinline ">"
+outputto "ORIGINALYEAR"
+sayuntil "<"
+
+
+
+findline "<popular_shelves>"
+joinuntil "</popular_shelves>"
+outputto "genre"
+
+
+
+Set "Scifi"
+Set "sff"
+
+Do
+	Set "TMP"
+	Set "Skip"
+	findinline "name=\""
+	if "a"
+		if "american\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "american-literature\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "adult\""
+			Set "TMP" "Adult"
+		endif
+
+	else
+	if "b"
+		if "banned-books\""
+			IfNotOutput "banned"
+				Set "TMP" "Banned Books"
+				Set "banned" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "banned-books-list\""
+			IfNotOutput "banned"
+				Set "TMP" "Banned Books"
+				Set "banned" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "c"
+		if "classics\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "classic\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "classic-literature\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "classics-to-read\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "classic-lit\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "classical\""
+			IfNotOutput "classics"
+				Set "TMP" "Classics"
+				Set "classics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "d"
+		if "dystopian\""
+			IfNotOutput "dystopian"
+				Set "TMP" "Dystopia"
+				Set "dystopian" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "dystopia\""
+			IfNotOutput "dystopian"
+				Set "TMP" "Dystopia"
+				Set "dystopian" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "e"
+		if "ethics\""
+			Set "TMP" "ethics"
+		endif
+	else
+	if "f"
+		if "fantasy-sci-fi\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "fantasy-scifi\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "fiction\""
+			Set "TMP" "Fiction"
+		endif
+		if "fantasy\""
+			Set "TMP" "Fantasy"
+		endif
+		if "filosofie\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "filosofia\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "filosofía\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "filosofi\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "g"
+		if "great-american-read\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "h"
+		if "holiday\""
+			Set "TMP" "Holiday"
+		endif
+	else
+	if "l"
+		if "literature\""
+			Set "TMP" "Literature"
+		endif
+	else 
+	if "n"
+		if "novels\""
+			IfNotOutput "novels"
+				Set "TMP" "Novels"
+				Set "novels" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "novel\""
+			IfNotOutput "novels"
+				Set "TMP" "Novels"
+				Set "novels" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "non-fiction\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "non-fiction-to-read\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "non-fic\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "nonfic\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "nonfiction-to-read\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		if "nonfiction\""
+			IfNotOutput "nonfiction"
+				Set "TMP" "Nonfiction"
+				Set "nonfiction" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else
+	if "p"
+		if "pen-america\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophy\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosphy\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophical\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophy-theory\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philo\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "phil\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophie\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophy-to-read\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else 
+	if "s"
+		if "science-fiction\""
+			IfNotOutput "Scifi" 
+				Set "TMP" "Science Fiction"
+				Set "Scifi" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "scifi\""
+			IfNotOutput "Scifi" 
+				Set "TMP" "Science Fiction"
+				Set "Scifi" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sf\""
+			IfNotOutput "Scifi" 
+				Set "TMP" "Science Fiction"
+				Set "Scifi" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sci-fi\""
+			IfNotOutput "Scifi"
+				Set "TMP" "Science Fiction"
+				Set "Scifi" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sci-fi-fantasy\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "scifi-fantasy\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "science-fiction-fantasy\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sff\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sci-fi-and-fantasy\""
+			IfNotOutput "sff"
+				Set "TMP" "Science Fiction Fantasy"
+				Set "sff" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "space-opera\""
+			Set "TMP" "Space Opera"
+		endif
+		if "space\""
+			Set "TMP" "Space"
+		endif
+		if "speculative-fiction\""
+			Set "TMP" "Speculative Fiction"
+		endif
+	else
+	if "t"
+		if "the-great-american-read\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "texas\""
+			IfNotOutput "american"
+				Set "TMP" "American Literature"
+				Set "american" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+	else 
+	if "v"
+		if "victorian\""
+			Set "TMP" "Victorian"
+		endif
+	else 
+		if "17th-century\""
+			Set "TMP" "17th Century"
+		endif
+		if "18th-century\""
+			Set "TMP" "18th Century"
+		endif
+		if "19th-century\""
+			Set "TMP" "19th Century"
+		endif
+		if "20th-century\""
+			Set "TMP" "20th Century"
+		endif
+		if "فلسفة\""
+			IfNotOutput "philosophy"
+				Set "TMP" "Philosophy"
+				Set "philosophy" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+	#endif # other
+	endif # v
+	endif # t
+	endif # s
+	endif # p
+	endif # n
+	endif # l
+	endif # h
+	endif # g
+	endif # f
+	endif # e
+	endif # d
+	endif # c
+	endif # b
+	endif # a
+
+
+	
+	#christmas;holiday;charles-dickens;;rory-gilmore-reading-challenge;dickens;;ghosts;classici;england;short-stories;novella;winter;childhood;christmas-books
+	
+		
+		
+		if "german\""
+			IfNotOutput "german"
+				Set "TMP" "German Literature"
+				Set "german" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "germany\""
+			IfNotOutput "german"
+				Set "TMP" "German Literature"
+				Set "german" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "german-literature\""
+			IfNotOutput "german"
+				Set "TMP" "German Literature"
+				Set "german" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+
+		if "politics\""
+			Set "TMP" "Politics"
+		endif
+		if "psychology\""
+			Set "TMP" "Psychology"
+		endif
+		if "metaphysics\""
+			Set "TMP" "Metaphysics"
+		endif
+		if "epistemology\""
+			Set "TMP" "Epistemology"
+		endif
+		if "enlightenment\""
+			Set "TMP" "Enlightenment"
+		endif
+		if "german-idealism\""
+			Set "TMP" "German Idealism"
+		endif
+		if "modern-philosophy\""
+			Set "TMP" "Modern Philosophy"
+		endif
+
+		if "theory\""
+			Set "TMP" "Theory"
+		endif
+		
+		if "historia\""
+			IfNotOutput "history"
+				Set "TMP" "Historical"
+				Set "history" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "history\""
+			IfNotOutput "history"
+				Set "TMP" "Historical"
+				Set "history" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "historical\""
+			IfNotOutput "history"
+				Set "TMP" "Historical"
+				Set "history" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		
+
+		if "school\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "for-school\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "read-for-school\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "school-books\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "high-school\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "read-in-school\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "school-reads\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "middle-grade\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "middle-highschool\""
+			IfNotOutput "school"
+				Set "TMP" "School"
+				Set "school" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		
+		if "ethics\""
+			IfNotOutput "ethics"
+				Set "TMP" "Ethics"
+				Set "ethics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophy-ethics\""
+			IfNotOutput "ethics"
+				Set "TMP" "Ethics"
+				Set "ethics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "moral-philosophy\""
+			IfNotOutput "ethics"
+				Set "TMP" "Ethics"
+				Set "ethics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "moral-philosophy\""
+			IfNotOutput "ethics"
+				Set "TMP" "Ethics"
+				Set "ethics" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "political-philosophy\""
+			Set "TMP" "Political Philosophy"
+		endif
+		if "academic\""
+			IfNotOutput "academic"
+				Set "TMP" "Academic"
+				Set "academic" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "college\""
+			IfNotOutput "academic"
+				Set "TMP" "Academic"
+				Set "academic" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "poetry\""
+			Set "TMP" "Poetry"
+		endif
+		if "mythology\""
+			Set "TMP" "Mythology"
+		endif
+		if "adventure\""
+			Set "TMP" "Adventure"
+		endif
+		if "historical-fiction\""
+			Set "TMP" "Historical Fiction"
+		endif
+		if "greek-mythology\""
+			Set "TMP" "Greek Mythology"
+		endif
+		if "epic\""
+			Set "TMP" "Epic"
+		endif
+		if "ancient\""
+			Set "TMP" "Ancient"
+		endif
+		if "ancient-greece\""
+			Set "TMP" "Ancient Greece"
+		endif
+		
+		if "greek\""
+			IfNotOutput "greek"
+				Set "TMP" "Greek Literature"
+				Set "greek" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "greece\""
+			IfNotOutput "greek"
+				Set "TMP" "Greek Literature"
+				Set "greek" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		if "childrens\""
+			IfNotOutput "childrens"
+				Set "TMP" "Childrens"
+				Set "childrens" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "juvenile\""
+			IfNotOutput "childrens"
+				Set "TMP" "Childrens"
+				Set "childrens" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "kid\""
+			IfNotOutput "childrens"
+				Set "TMP" "Childrens"
+				Set "childrens" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "childhood-reads\""
+			IfNotOutput "childrens"
+				Set "TMP" "Childrens"
+				Set "childrens" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		if "feminism\""
+			IfNotOutput "feminism"
+				Set "TMP" "Feminism"
+				Set "feminism" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "feminist\""
+			IfNotOutput "feminism"
+				Set "TMP" "Feminism"
+				Set "feminism" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "women\""
+			Set "TMP" "Women"
+		endif
+		if "anthropology\""
+			Set "TMP" "Anthropology"
+		endif
+		if "culture\""
+			Set "TMP" "Culture"
+		endif
+		if "evolution\""
+			Set "TMP" "Evolution"
+		endif
+		if "prehistory\""
+			Set "TMP" "Prehistory"
+		endif
+		if "economics\""
+			Set "TMP" "Economics"
+		endif
+		if "archaeology\""
+			Set "TMP" "Archaeology"
+		endif
+		if "world-history\""
+			Set "TMP" "World History"
+		endif
+		if "anarchism\""
+			Set "TMP" "Anarchism"
+		endif
+		
+		if "sociology\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "social-sciences\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sociology\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "society\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "social-science\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "social-cultural\""
+			IfNotOutput "sociology"
+				Set "TMP" "Sociology"
+				Set "sociology" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		if "biography\""
+			Set "TMP" "Biography"
+		endif
+		if "health\""
+			Set "TMP" "Health"
+		endif
+		if "microhistory\""
+			Set "TMP" "Microhistory"
+		endif
+		if "gender-studies\""
+			IfNotOutput "gender"
+				Set "TMP" "Gender Studies"
+				Set "gender" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "gender\""
+			IfNotOutput "gender"
+				Set "TMP" "Gender Studies"
+				Set "gender" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "bio-memoir\""
+			IfNotOutput "memoir"
+				Set "TMP" "Memoir"
+				Set "memoir" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "biography-memoir\""
+			IfNotOutput "memoir"
+				Set "TMP" "Memoir"
+				Set "memoir" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "biography-memoir\""
+			IfNotOutput "memoir"
+				Set "TMP" "Memoir"
+				Set "memoir" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "memoir\""
+			IfNotOutput "memoir"
+				Set "TMP" "Memoir"
+				Set "memoir" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "education\""
+			Set "TMP" "Education"
+		endif
+		if "female-authors\""
+			Set "TMP" "Female Authors"
+		endif
+		if "sex\""
+			Set "TMP" "Sex"
+		endif
+		if "pop-culture\""
+			Set "TMP" "Pop Culture"
+		endif	
+		if "essays\""
+			IfNotOutput "essay"
+				Set "TMP" "Essays"
+				Set "essay" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "essay\""
+			IfNotOutput "essays"
+				Set "TMP" "Essays"
+				Set "essays" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "art\""
+			Set "TMP" "Art"
+		endif
+		if "humor\""
+			Set "TMP" "Humor"
+		endif
+		
+		if "atheism\""
+			Set "TMP" "Atheism"
+		endif
+		
+		if "british\""
+			IfNotOutput "british"
+				Set "TMP" "British Literature"
+				Set "british" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "british-literature\""
+			IfNotOutput "british"
+				Set "TMP" "British Literature"
+				Set "british" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "english\""
+			IfNotOutput "british"
+				Set "TMP" "British Literature"
+				Set "british" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "theology\""
+			Set "TMP" "Theology"
+		endif
+		
+		if "philosophy-religion\""
+			IfNotOutput "philrel"
+				Set "TMP" "Philosophy of Religion"
+				Set "philrel" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "philosophy-and-religion\""
+			IfNotOutput "philrel"
+				Set "TMP" "Philosophy of Religion"
+				Set "philrel" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "religion-philosophy\""
+			IfNotOutput "philrel"
+				Set "TMP" "Philosophy of Religion"
+				Set "philrel" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "skepticism\""
+			Set "TMP" "Skepticism"
+		endif
+		if "contemporary-philosophy\""
+			Set "TMP" "Contemporary Philosophy"
+		endif
+		if "philosophy-psychology\""
+			Set "TMP" "Philosophy Psychology"
+		endif
+		if "religion-mythology\""
+			Set "TMP" "Religion Mythology"
+		endif
+		
+		if "spirituality\""
+			IfNotOutput "spirituality"
+				Set "TMP" "Spirituality"
+				Set "spirituality" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "religion-spirituality\""
+			IfNotOutput "spirituality"
+				Set "TMP" "Spirituality"
+				Set "spirituality" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		if "science\""
+			IfNotOutput "science"
+				Set "TMP" "Science"
+				Set "science" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "sciences\""
+			IfNotOutput "science"
+				Set "TMP" "Science"
+				Set "science" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "religions\""
+			Set "TMP" "Religion"
+		endif
+		if "christianity\""
+			IfNotOutput "christianity"
+				Set "TMP" "Christianity"
+				Set "christianity" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "christian\""
+			IfNotOutput "christianity"
+				Set "TMP" "Christianity"
+				Set "christianity" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+
+		if "secular\""
+			Set "TMP" "Secular"
+		endif
+
+		if "books\""
+			Set "Skip" "1"
+		endif
+		if "wish-list\""
+			Set "Skip" "1"
+		endif
+		
+		
+		if "to-get\""
+			Set "Skip" "1"
+		endif
+		
+		if "favorite\""
+			Set "Skip" "1"
+		endif
+		if "nobel-prize\""
+			Set "Skip" "1"
+		endif
+		if "digital\""
+			Set "Skip" "1"
+		endif
+		if "other\""
+			Set "Skip" "1"
+		endif
+		if "hoopla\""
+			Set "Skip" "1"
+		endif
+		if "goodreads-giveaways\""
+			Set "Skip" "1"
+		endif
+		if "want-to-read"
+			Set "Skip" "1"
+		endif
+		if "giveaway\""
+			Set "Skip" "1"
+		endif
+		if "personal-bookshelf"
+			Set "Skip" "1"
+		endif
+		if "in-my-tbr-pile"
+			Set "Skip" "1"
+		endif
+		if "lib-masterpiece"
+			Set "Skip" "1"
+		endif
+			if "before-pushing-up-daisies"
+			Set "Skip" "1"
+		endif
+		if "george-s-books"
+			Set "Skip" "1"
+		endif
+		if "from-mom"
+			Set "Skip" "1"
+		endif
+		if "purchase"
+			Set "Skip" "1"
+		endif
+		if "graphic-novel-comic"
+			Set "Skip" "1"
+		endif
+		if "comics"
+			Set "Skip" "1"
+		endif
+		if "2023-books"
+			Set "Skip" "1"
+		endif
+		if "graphic-novel"
+			Set "Skip" "1"
+		endif
+		if "translated"
+			Set "Skip" "1"
+		endif
+		if "on-my-shelf"
+			Set "Skip" "1"
+		endif
+		if "partially-read"
+			Set "Skip" "1"
+		endif
+		if "on-hold"
+			Set "Skip" "1"
+		endif
+		if "unfinished"
+			Set "Skip" "1"
+		endif
+		if "must-read"
+			Set "Skip" "1"
+		endif
+		if "home-library"
+			Set "Skip" "1"
+		endif
+		if "want-to-buy"
+			Set "Skip" "1"
+		endif
+		if "great-books-of-the-western-world"
+			Set "Skip" "1"
+		endif
+		if "the-good-place"
+			Set "Skip" "1"
+		endif	
+		if "great-books"
+			Set "Skip" "1"
+		endif
+		if "?????"
+			Set "Skip" "1"
+		endif
+		if "recommended"
+			Set "Skip" "1"
+		endif
+		if "have"
+			Set "Skip" "1"
+		endif
+		if "e-book"
+			Set "Skip" "1"
+		endif
+		if "1001-books-to-read-before-you-die"
+			Set "Skip" "1"
+		endif
+		if "1001"
+			Set "Skip" "1"
+		endif
+		if "my-books"
+			Set "Skip" "1"
+		endif
+		if "tbr"
+			Set "Skip" "1"
+		endif
+		if "favourites"
+			Set "Skip" "1"
+		endif
+		if "re-read"
+			Set "Skip" "1"
+		endif
+		if "physical-tbr"
+			Set "Skip" "1"
+		endif
+		if "to-read"
+			Set "Skip" "1"
+		endif
+		if "currently-reading"
+			Set "Skip" "1"
+		endif
+		if "favorites"
+			Set "Skip" "1"
+		endif
+		if "owned"
+			Set "Skip" "1"
+		endif
+		if "series"
+			Set "Skip" "1"
+		endif
+		if "audiobook"
+			Set "Skip" "1"
+		endif
+		if "books-i-own"
+			Set "Skip" "1"
+		endif
+		if "kindle"
+			Set "Skip" "1"
+		endif
+		if "library"
+			Set "Skip" "1"
+		endif
+		if "ebook"
+			Set "Skip" "1"
+		endif
+		if "dnf"
+			Set "Skip" "1"
+		endif
+		if "audiobooks"
+			Set "Skip" "1"
+		endif
+		if "to-buy"
+			Set "Skip" "1"
+		endif
+		if "owned-books"
+			Set "Skip" "1"
+		endif
+		if "audio"
+			Set "Skip" "1"
+		endif
+		if "audible"
+			Set "Skip" "1"
+		endif
+		if "default"
+			Set "Skip" "1"
+		endif
+		if "abandoned"
+			Set "Skip" "1"
+		endif
+		if "book-club"
+			Set "Skip" "1"
+		endif
+		if "my-library"
+			Set "Skip" "1"
+		endif
+		if "did-not-finish"
+			Set "Skip" "1"
+		endif
+
+	IfOutput "TMP"
+		IfOutput "genre"
+			say ";"
+		endif
+		SayOutput "TMP"
+	else
+		IfNotOutput "Skip" 
+			outputto "genre_extra"
+			IfOutput "genre_extra"
+				say ";"
+			endif
+			sayuntil "\""	
+			outputto "genre"	
+		endif
+	endif
+	findinline "<"
+
+while "s" 50
+
+Set "philrel"
+Set "spirituality"
+Set "Scifi"
+Set "science"
+Set "sff"
+Set "classics"
+Set "novels"
+Set "philosophy"
+Set "nonfiction"
+Set "dystopian"
+Set "american"
+Set "german"
+Set "banned"
+Set "childrens"
+Set "academic"
+Set "ethics"
+Set "greek"
+Set "school"
+Set "history"
+Set "feminism"
+Set "gender"
+Set "sociology"
+Set "memoir"
+Set "essay"
+Set "british"
+Set "TMP"
+Set "Skip" 
+
+
+ 
+# Cover
+#findline "\",\"image\":\""
+#findinline "\",\"image\":\""
+#outputto "coverurl"
+#sayuntil "\",\""
+# 
+## Author
+#findline "type\":\"Person\",\"name\":\""
+#findinline "type\":\"Person\",\"name\":\""
+#outputto "albumartist"
+#sayuntil "\",\""
+# 
+## Summary
+#gotoline 1
+#findline "<span class=\"Formatted\">"
+#findinline "<span class=\"Formatted\">"
+##regexpreplace "</?[^><]+>" ""
+##replace "<br />" " "
+#outputto "comment"
+#sayuntil "</span>"
+# 
+## Series
+##findline "Series\",\"title\":\""
+##findinline "Series\",\"title\":\""
+##outputto "Series"
+##sayuntil "\",\""
+# 
+## Series-part
+##findline "<!-- --> #"
+##findinline "<!-- --> #"
+##outputto "Series-part"
+##sayuntil "<"
+# 
+## Year
+#findline "publicationInfo\">"
+#findinline "publicationInfo\">"
+#findinline "<"
+#movechar -5
+#outputto "year"
+#
+#    sayuntil "<"
+#
