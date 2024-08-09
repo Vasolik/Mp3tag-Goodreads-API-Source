@@ -151,11 +151,40 @@ Do
 		if "anarchism\""
 			Set "TMP" "Anarchism"
 		endif
+		if "adult-fiction\""
+			Set "TMP" "Adult Fiction"
+		endif
+		if "adult-romance\""
+			Set "TMP" "Adult Romance"
+		endif
+		if "adult-fantasy\""
+			Set "TMP" "Adult Fantasy"
+		endif
+		
 		if "art\""
 			Set "TMP" "Art"
 		endif
+		if "alternate-history\""
+			Set "TMP" "Alternate History"
+		endif
 		if "atheism\""
 			Set "TMP" "Atheism"
+		endif
+		if "audiobook"
+			Set "Skip" "1"
+		endif
+		if "audiobooks"
+			Set "Skip" "1"
+		endif
+		if "audio"
+			Set "Skip" "1"
+		endif
+		if "audible"
+			Set "Skip" "1"
+		endif
+		
+		if "abandoned"
+			Set "Skip" "1"
 		endif
 	else
 	if "b"
@@ -221,57 +250,76 @@ Do
 		if "books\""
 			Set "Skip" "1"
 		endif
+		if "black-authors\""
+			Set "TMP" "Black Authors"
+		endif
 		if "before-pushing-up-daisies"
+			Set "Skip" "1"
+		endif
+		if "books-i-own"
+			Set "Skip" "1"
+		endif
+		if "book-club"
 			Set "Skip" "1"
 		endif
 	else
 	if "c"
-		if "classics\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+		if "cla"
+			if "classics\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
-		endif
-		if "classic\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+			if "classic\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
-		endif
-		if "classic-literature\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+			if "classic-literature\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
-		endif
-		if "classics-to-read\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+			if "classics-to-read\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
-		endif
-		if "classic-lit\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+			if "classic-lit\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
-		endif
-		if "classical\""
-			IfNotOutput "classics"
-				Set "TMP" "Classics"
-				Set "classics" "1"
-			else 
-				Set "Skip" "1"
+			if "classical\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
+			endif
+			if "classici\""
+				IfNotOutput "classics"
+					Set "TMP" "Classics"
+					Set "classics" "1"
+				else 
+					Set "Skip" "1"
+				endif
 			endif
 		endif
 		if "college\""
@@ -291,6 +339,14 @@ Do
 			endif
 		endif
 		if "childhood-reads\""
+			IfNotOutput "childrens"
+				Set "TMP" "Childrens"
+				Set "childrens" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "childhood\""
 			IfNotOutput "childrens"
 				Set "TMP" "Childrens"
 				Set "childrens" "1"
@@ -320,7 +376,32 @@ Do
 				Set "Skip" "1"
 			endif
 		endif
+		if "christmas\""
+			Set "TMP" "Christmas"
+		endif
+		if "christmas-books\""
+			IfNotOutput "christmas"
+				Set "TMP" "Christmas"
+				Set "christmas" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "christmas\""
+			IfNotOutput "christmas"
+				Set "TMP" "Christmas"
+				Set "christmas" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
+		
+		
 		if "comics"
+			Set "Skip" "1"
+		endif
+		if "currently-reading"
 			Set "Skip" "1"
 		endif
 	else
@@ -341,10 +422,26 @@ Do
 				Set "Skip" "1"
 			endif
 		endif
+		if "diverse-inclusive\""
+			IfNotOutput "inclusive"
+				Set "TMP" "Inclusive"
+				Set "inclusive" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
 		if "digital\""
 			Set "Skip" "1"
 		endif
-		
+		if "dnf"
+			Set "Skip" "1"
+		endif
+		if "default"
+			Set "Skip" "1"
+		endif
+		if "did-not-finish"
+			Set "Skip" "1"
+		endif
 	else
 	if "e"
 		if "ethics\""
@@ -396,6 +493,23 @@ Do
 			else 
 				Set "Skip" "1"
 			endif
+		endif
+		if "england\""
+			IfNotOutput "british"
+				Set "TMP" "British Literature"
+				Set "british" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "egypt\""
+			Set "TMP" "Egypt"
+		endif
+		if "e-book"
+			Set "Skip" "1"
+		endif
+		if "ebook"
+			Set "Skip" "1"
 		endif
 	else
 	if "f"
@@ -480,12 +594,44 @@ Do
 		if "female-authors\""
 			Set "TMP" "Female Authors"
 		endif
+		if "fairytales-fantasy-and-scifi\""
+			IfNotOutput "fairytale"
+				Set "TMP" "Fairytale"
+				Set "fairytale" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "fairytale\""
+			IfNotOutput "fairytale"
+				Set "TMP" "Fairytale"
+				Set "fairytale" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "fairytales\""
+			IfNotOutput "fairytale"
+				Set "TMP" "Fairytale"
+				Set "fairytale" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
 		if "favorite\""
 			Set "Skip" "1"
 		endif
 		if "from-mom"
 			Set "Skip" "1"
 		endif
+		if "favourites"
+			Set "Skip" "1"
+		endif
+		if "favorites"
+			Set "Skip" "1"
+		endif
+		
+		
 	else
 	if "g"
 		if "great-american-read\""
@@ -526,6 +672,18 @@ Do
 		if "greek-mythology\""
 			Set "TMP" "Greek Mythology"
 		endif
+		if "ghosts\""
+			Set "TMP" "Ghosts"
+		endif
+		if "gaaaaaay-lbtq\""
+			IfNotOutput "lgbt"
+				Set "TMP" "LGBT+"
+				Set "lgbt" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
 		if "greek\""
 			IfNotOutput "greek"
 				Set "TMP" "Greek Literature"
@@ -570,6 +728,12 @@ Do
 		if "graphic-novel"
 			Set "Skip" "1"
 		endif
+		if "great-books-of-the-western-world"
+			Set "Skip" "1"
+		endif
+		if "great-books"
+			Set "Skip" "1"
+		endif
 	else
 	if "h"
 		if "holiday\""
@@ -610,6 +774,10 @@ Do
 		if "historical-fiction\""
 			Set "TMP" "Historical Fiction"
 		endif
+		if "historical-fantasy\""
+			Set "TMP" "Historical Fantasy"
+		endif
+		
 		if "health\""
 			Set "TMP" "Health"
 		endif
@@ -619,10 +787,24 @@ Do
 		if "hoopla\""
 			Set "Skip" "1"
 		endif
+		if "home-library"
+			Set "Skip" "1"
+		endif
+		if "have"
+			Set "Skip" "1"
+		endif
 	else
 	if "i"
 		if "in-my-tbr-pile"
 			Set "Skip" "1"
+		endif
+		if "inclusive\""
+			IfNotOutput "inclusive"
+				Set "TMP" "Inclusive"
+				Set "inclusive" "1"
+			else 
+				Set "Skip" "1"
+			endif
 		endif
 	else
 	if "j"
@@ -644,12 +826,44 @@ Do
 				Set "Skip" "1"
 			endif
 		endif
+		if "kindle"
+			Set "Skip" "1"
+		endif
+		
 	else
 	if "l"
 		if "literature\""
 			Set "TMP" "Literature"
 		endif
+		if "lgbt\""
+			IfNotOutput "lgbt"
+				Set "TMP" "LGBT+"
+				Set "lgbt" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "lgbt\""
+			IfNotOutput "lgbt"
+				Set "TMP" "LGBT+"
+				Set "lgbt" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "lgbtq\""
+			IfNotOutput "lgbt"
+				Set "TMP" "LGBT+"
+				Set "lgbt" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+
 		if "lib-masterpiece"
+			Set "Skip" "1"
+		endif
+		if "library"
 			Set "Skip" "1"
 		endif
 	else 
@@ -698,10 +912,23 @@ Do
 				Set "Skip" "1"
 			endif
 		endif
+		if "mystery-thriller\""
+			Set "TMP" "Mystery Thriller"
+		endif
+		if "mystery\""
+			Set "TMP" "Mystery"
+		endif
+		if "magic\""
+			Set "TMP" "Magic"
+		endif
+		
 		if "my-library"
 			Set "Skip" "1"
 		endif
 		if "must-read"
+			Set "Skip" "1"
+		endif
+		if "my-books"
 			Set "Skip" "1"
 		endif
 	else
@@ -762,6 +989,22 @@ Do
 				Set "Skip" "1"
 			endif
 		endif
+		if "novellas\""
+			IfNotOutput "novella"
+				Set "TMP" "Novella"
+				Set "novella" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "novella\""
+			IfNotOutput "novella"
+				Set "TMP" "Novella"
+				Set "novella" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
 		
 		if "nonfiction\""
 			IfNotOutput "nonfiction"
@@ -783,6 +1026,12 @@ Do
 			Set "Skip" "1"
 		endif
 		if "on-hold"
+			Set "Skip" "1"
+		endif
+		if "owned"
+			Set "Skip" "1"
+		endif
+		if "owned-books"
 			Set "Skip" "1"
 		endif
 	else
@@ -913,6 +1162,9 @@ Do
 		if "partially-read"
 			Set "Skip" "1"
 		endif
+		if "physical-tbr"
+			Set "Skip" "1"
+		endif
 	else 
 	if "r"
 		if "read-for-school\""
@@ -952,6 +1204,16 @@ Do
 		endif
 		if "religions\""
 			Set "TMP" "Religion"
+		endif
+		if "romance\""
+			Set "TMP" "Romance"
+		endif
+		
+		if "recommended"
+			Set "Skip" "1"
+		endif
+		if "re-read"
+			Set "Skip" "1"
 		endif
 	else
 	if "s"
@@ -1036,6 +1298,40 @@ Do
 		if "speculative-fiction\""
 			Set "TMP" "Speculative Fiction"
 		endif
+
+		if "short-story\""
+			IfNotOutput "short"
+				Set "TMP" "Short Stories"
+				Set "short" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "short-stories\""
+			IfNotOutput "short"
+				Set "TMP" "Short Stories"
+				Set "short" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "short-fiction\""
+			IfNotOutput "short"
+				Set "TMP" "Short Stories"
+				Set "short" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		if "short\""
+			IfNotOutput "short"
+				Set "TMP" "Short Stories"
+				Set "short" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
 		if "school\""
 			IfNotOutput "school"
 				Set "TMP" "School"
@@ -1114,6 +1410,10 @@ Do
 		if "skepticism\""
 			Set "TMP" "Skepticism"
 		endif
+		if "steampunk\""
+			Set "TMP" "Steampunk"
+		endif
+		
 		if "spirituality\""
 			IfNotOutput "spirituality"
 				Set "TMP" "Spirituality"
@@ -1140,6 +1440,9 @@ Do
 		endif
 		if "secular\""
 			Set "TMP" "Secular"
+		endif
+		if "series"
+			Set "Skip" "1"
 		endif
 	else
 	if "t"
@@ -1171,7 +1474,30 @@ Do
 		if "translated"
 			Set "Skip" "1"
 		endif
+		if "the-good-place"
+			Set "Skip" "1"
+		endif
+		if "tbr"
+			Set "Skip" "1"
+		endif
+		if "to-read"
+			Set "Skip" "1"
+		endif
+		if "to-buy"
+			Set "Skip" "1"
+		endif
 	else 
+	if "u"
+		if "urban-fantasy\""
+			Set "TMP" "Urban Fantasy"
+		endif
+		if "unfinished"
+			Set "Skip" "1"
+		endif
+		if "unshelved"
+			Set "Skip" "1"
+		endif
+	else
 	if "v"
 		if "victorian\""
 			Set "TMP" "Victorian"
@@ -1184,10 +1510,17 @@ Do
 		if "world-history\""
 			Set "TMP" "World History"
 		endif
+		if "winter\""
+			Set "TMP" "Winter"
+		endif
+		
 		if "wish-list\""
 			Set "Skip" "1"
 		endif
 		if "want-to-read"
+			Set "Skip" "1"
+		endif
+		if "want-to-buy"
 			Set "Skip" "1"
 		endif
 	else	
@@ -1203,6 +1536,15 @@ Do
 		if "20th-century\""
 			Set "TMP" "20th Century"
 		endif
+		if "queer\""
+			IfNotOutput "lgbt"
+				Set "TMP" "LGBT+"
+				Set "lgbt" "1"
+			else 
+				Set "Skip" "1"
+			endif
+		endif
+		
 		if "فلسفة\""
 			IfNotOutput "philosophy"
 				Set "TMP" "Philosophy"
@@ -1214,10 +1556,20 @@ Do
 		if "2023-books"
 			Set "Skip" "1"
 		endif
+		if "?????"
+			Set "Skip" "1"
+		endif
+		if "1001-books-to-read-before-you-die"
+			Set "Skip" "1"
+		endif
+		if "1001"
+			Set "Skip" "1"
+		endif
 		
 	#endif # other
 	endif # w
 	endif # v
+	endif # u
 	endif # t
 	endif # s
 	endif # r
@@ -1238,130 +1590,6 @@ Do
 	endif # b
 	endif # a
 
-
-	
-	#christmas;holiday;charles-dickens;;rory-gilmore-reading-challenge;dickens;;ghosts;classici;england;short-stories;novella;winter;childhood;christmas-books
-
-		
-		
-				
-		
-		if "unfinished"
-			Set "Skip" "1"
-		endif
-		
-		
-		
-		if "home-library"
-			Set "Skip" "1"
-		endif
-		if "want-to-buy"
-			Set "Skip" "1"
-		endif
-		if "great-books-of-the-western-world"
-			Set "Skip" "1"
-		endif
-		if "the-good-place"
-			Set "Skip" "1"
-		endif	
-		if "great-books"
-			Set "Skip" "1"
-		endif
-		if "?????"
-			Set "Skip" "1"
-		endif
-		if "recommended"
-			Set "Skip" "1"
-		endif
-		if "have"
-			Set "Skip" "1"
-		endif
-		if "e-book"
-			Set "Skip" "1"
-		endif
-		if "1001-books-to-read-before-you-die"
-			Set "Skip" "1"
-		endif
-		if "1001"
-			Set "Skip" "1"
-		endif
-		if "my-books"
-			Set "Skip" "1"
-		endif
-		if "tbr"
-			Set "Skip" "1"
-		endif
-		if "favourites"
-			Set "Skip" "1"
-		endif
-		if "re-read"
-			Set "Skip" "1"
-		endif
-		if "physical-tbr"
-			Set "Skip" "1"
-		endif
-		if "to-read"
-			Set "Skip" "1"
-		endif
-		if "currently-reading"
-			Set "Skip" "1"
-		endif
-		if "favorites"
-			Set "Skip" "1"
-		endif
-		if "owned"
-			Set "Skip" "1"
-		endif
-		if "series"
-			Set "Skip" "1"
-		endif
-		if "audiobook"
-			Set "Skip" "1"
-		endif
-		if "books-i-own"
-			Set "Skip" "1"
-		endif
-		if "kindle"
-			Set "Skip" "1"
-		endif
-		if "library"
-			Set "Skip" "1"
-		endif
-		if "ebook"
-			Set "Skip" "1"
-		endif
-		if "dnf"
-			Set "Skip" "1"
-		endif
-		if "audiobooks"
-			Set "Skip" "1"
-		endif
-		if "to-buy"
-			Set "Skip" "1"
-		endif
-		if "owned-books"
-			Set "Skip" "1"
-		endif
-		if "audio"
-			Set "Skip" "1"
-		endif
-		if "audible"
-			Set "Skip" "1"
-		endif
-		if "default"
-			Set "Skip" "1"
-		endif
-		if "abandoned"
-			Set "Skip" "1"
-		endif
-		if "book-club"
-			Set "Skip" "1"
-		endif
-
-		if "did-not-finish"
-			Set "Skip" "1"
-		endif
-
 	IfOutput "TMP"
 		IfOutput "genre"
 			say ";"
@@ -1380,6 +1608,8 @@ Do
 	findinline "<"
 
 while "s" 50
+
+
 
 Set "philrel"
 Set "spirituality"
@@ -1408,8 +1638,11 @@ Set "essay"
 Set "british"
 Set "TMP"
 Set "Skip" 
-
-
+Set "christmas"
+Set "lgbt"
+Set "inclusive"
+Set "short"
+Set "novella"
  
 # Cover
 #findline "\",\"image\":\""
